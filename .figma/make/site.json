@@ -1,0 +1,10 @@
+{
+  "description": "An interactive e-learning platform designed for students with disabilities, offering accessible courses, video lessons, and personalized learning experiences.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

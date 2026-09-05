@@ -1,0 +1,195 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@87..125,400;87..125,500;87..125,600;87..125,700;87..125,800&family=DM+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+@import 'tailwindcss';
+
+:root {
+  --background: #f6f7f4;
+  --foreground: #15221e;
+  --card: #ffffff;
+  --card-foreground: #15221e;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --secondary: #e8eee9;
+  --secondary-foreground: #15221e;
+  --muted: #eef1ed;
+  --muted-foreground: #5d6b64;
+  --accent: #f7b955;
+  --accent-foreground: #15221e;
+  --border: #dce3dc;
+  --ring: #2563eb;
+  --radius: 1rem;
+}
+
+@theme inline {
+  --color-primary: #2563EB;
+  --color-primary-dark: #1D4ED8;
+  --color-primary-light: #DBEAFE;
+  --color-accent: #F7B955;
+  --color-accent-dark: #D88A16;
+  --font-display: 'Archivo', system-ui, sans-serif;
+  --font-body: 'Source Sans 3', system-ui, sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Archivo', system-ui, sans-serif;
+  letter-spacing: -0.035em;
+}
+
+::selection { background: #b8e6ce; color: #15221e; }
+
+.page-shell { background: radial-gradient(circle at 100% 0%, #e1f3e8 0, transparent 30rem), var(--background); }
+.eyebrow { font-family: 'DM Mono', monospace; font-size: .69rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; }
+.surface-card { border: 1px solid var(--border); background: rgba(255,255,255,.9); box-shadow: 0 14px 35px rgba(21,34,30,.06); }
+
+@media (max-width: 767px) {
+  body { padding-bottom: 4.75rem; }
+  .mobile-safe { padding-bottom: calc(5.5rem + env(safe-area-inset-bottom)); }
+}
+
+/* Accessibility: dyslexia font */
+.font-dyslexia {
+  font-family: 'Comic Sans MS', 'OpenDyslexic', 'DM Sans', sans-serif;
+  letter-spacing: 0.05em;
+  word-spacing: 0.1em;
+}
+
+/* Accessibility: high contrast */
+.high-contrast {
+  --bg-primary: #000000;
+  --text-primary: #FFFFFF;
+  --border-primary: #FFFFFF;
+}
+
+.high-contrast * {
+  border-color: #FFFF00 !important;
+}
+
+.high-contrast body,
+.high-contrast .bg-white,
+.high-contrast .bg-slate-50 {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+/* Accessibility: reduced motion */
+.reduced-motion *,
+.reduced-motion *::before,
+.reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* Accessibility: large buttons */
+.large-buttons button,
+.large-buttons [role="button"],
+.large-buttons a {
+  min-height: 52px !important;
+  min-width: 52px !important;
+  font-size: 1.1rem !important;
+}
+
+/* Accessibility: focus indicator */
+.focus-enhanced *:focus {
+  outline: 3px solid #F59E0B !important;
+  outline-offset: 3px !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Video player custom styles */
+.video-container {
+  position: relative;
+  background: #000;
+}
+
+.video-subtitle {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.8);
+  color: #fff;
+  padding: 4px 16px;
+  border-radius: 4px;
+  text-align: center;
+  max-width: 80%;
+  pointer-events: none;
+}
+
+/* Transcript highlight */
+.transcript-active {
+  background: #CCFBF1;
+  color: #0F766E;
+  border-left: 3px solid #0D9488;
+  padding-left: 8px;
+  border-radius: 2px;
+}
+
+/* Sidebar scrollbar */
+.sidebar-nav::-webkit-scrollbar {
+  width: 0;
+}
+
+/* Toast animation */
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+.toast-enter {
+  animation: slideIn 0.3s ease;
+}
+
+/* Range input styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  height: 4px;
+  background: #CBD5E1;
+  border-radius: 999px;
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  background: #0D9488;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Progress bar */
+.progress-bar {
+  background: linear-gradient(90deg, #0D9488, #14B8A6);
+  border-radius: 999px;
+  transition: width 0.5s ease;
+}
