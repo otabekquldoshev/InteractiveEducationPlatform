@@ -2,6 +2,7 @@
   "name": "eduaccess-platform",
   "private": true,
   "version": "1.0.0",
+  "packageManager": "pnpm@10.34.3",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
