@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "dev:api": "tsx watch server/src/server.ts",
-    "dev:all": "concurrently -k -n frontend,backend -c blue,green \"vite --host 0.0.0.0\" \"tsx watch server/src/server.ts\"",
+    "dev:api": "node --watch --import tsx server/src/server.ts",
+    "dev:all": "concurrently -k -n frontend,backend -c blue,green \"vite --host 0.0.0.0\" \"node --watch --import tsx server/src/server.ts\"",
     "start:api": "node --import tsx server/src/server.ts",
     "build": "vite build",
     "build:check": "tsc --noEmit && tsc -p server/tsconfig.json --noEmit",

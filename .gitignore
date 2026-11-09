@@ -13,6 +13,7 @@ vite.config.*.timestamp-*
 logs/
 *.log
 *.db
+!prisma/dev.db
 *.db-journal
 *.db-shm
 *.db-wal
