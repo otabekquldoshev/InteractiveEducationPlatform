@@ -1,30 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@87..125,400;87..125,500;87..125,600;87..125,700;87..125,800&family=DM+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@87..125,400;87..125,500;87..125,600;87..125,700;87..125,800&family=DM+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 @import 'tailwindcss';
 
 :root {
-  --background: #f6f7f4;
-  --foreground: #15221e;
+  --background: #fff9fb;
+  --foreground: #4a294f;
   --card: #ffffff;
   --card-foreground: #15221e;
-  --primary: #2563eb;
+  --primary: #9464a2;
   --primary-foreground: #ffffff;
-  --secondary: #e8eee9;
-  --secondary-foreground: #15221e;
-  --muted: #eef1ed;
-  --muted-foreground: #5d6b64;
-  --accent: #f7b955;
-  --accent-foreground: #15221e;
-  --border: #dce3dc;
-  --ring: #2563eb;
+  --secondary: #f8f1fb;
+  --secondary-foreground: #4a294f;
+  --muted: #f5edf7;
+  --muted-foreground: #765d79;
+  --accent: #e879a7;
+  --accent-foreground: #4a294f;
+  --border: #eadced;
+  --ring: #a978b5;
   --radius: 1rem;
 }
 
 @theme inline {
-  --color-primary: #2563EB;
-  --color-primary-dark: #1D4ED8;
-  --color-primary-light: #DBEAFE;
-  --color-accent: #F7B955;
-  --color-accent-dark: #D88A16;
+  --color-primary: #9464A2;
+  --color-primary-dark: #75527D;
+  --color-primary-light: #F8F1FB;
+  --color-accent: #E879A7;
+  --color-accent-dark: #C4517F;
   --font-display: 'Archivo', system-ui, sans-serif;
   --font-body: 'Source Sans 3', system-ui, sans-serif;
   --font-mono: 'DM Mono', monospace;
@@ -46,16 +46,76 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Archivo va Source Sans CJK gliflarini o'z ichiga olmaydi. Tilga mos
+   shrift zanjiri Hangul va Han belgilarining katakcha bo'lib qolishini oldini oladi. */
+html[lang="ko"] body,
+html[lang="ko"] button,
+html[lang="ko"] input,
+html[lang="ko"] select,
+html[lang="ko"] textarea,
+html[lang="ko"] h1,
+html[lang="ko"] h2,
+html[lang="ko"] h3,
+html[lang="ko"] h4,
+html[lang="ko"] h5,
+html[lang="ko"] h6,
+html[lang="ko"] .font-display,
+html[lang="ko"] .font-mono,
+html[lang="ko"] .eyebrow {
+  font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "Droid Sans Fallback", sans-serif;
+}
+
+html[lang="zh"] body,
+html[lang="zh"] button,
+html[lang="zh"] input,
+html[lang="zh"] select,
+html[lang="zh"] textarea,
+html[lang="zh"] h1,
+html[lang="zh"] h2,
+html[lang="zh"] h3,
+html[lang="zh"] h4,
+html[lang="zh"] h5,
+html[lang="zh"] h6,
+html[lang="zh"] .font-display,
+html[lang="zh"] .font-mono,
+html[lang="zh"] .eyebrow {
+  font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", "Droid Sans Fallback", sans-serif;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Archivo', system-ui, sans-serif;
   letter-spacing: -0.035em;
 }
 
-::selection { background: #b8e6ce; color: #15221e; }
+::selection { background: #f4c6d8; color: #4a294f; }
 
-.page-shell { background: radial-gradient(circle at 100% 0%, #e1f3e8 0, transparent 30rem), var(--background); }
+.page-shell { background: radial-gradient(circle at 100% 0%, #f8f1fb 0, transparent 30rem), var(--background); }
 .eyebrow { font-family: 'DM Mono', monospace; font-size: .69rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; }
 .surface-card { border: 1px solid var(--border); background: rgba(255,255,255,.9); box-shadow: 0 14px 35px rgba(21,34,30,.06); }
+
+.admin-shell {
+  background:
+    radial-gradient(circle at 78% -8%, rgba(169, 120, 181, .12), transparent 28rem),
+    #fbf7fc;
+}
+
+.admin-shell button,
+.admin-shell a,
+.admin-shell input,
+.admin-shell select,
+.admin-shell textarea {
+  transition-property: color, background-color, border-color, box-shadow, transform, opacity;
+  transition-duration: 160ms;
+}
+
+.admin-compact main .rounded-2xl {
+  border-radius: .8rem;
+}
+
+.admin-compact main .p-5,
+.admin-compact main .sm\:p-6 {
+  padding: 1rem;
+}
 
 @media (max-width: 767px) {
   body { padding-bottom: 4.75rem; }
@@ -145,6 +205,33 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
   max-width: 80%;
   pointer-events: none;
+}
+
+@keyframes surdo-avatar-breathe {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(1px) scale(1.012); }
+}
+
+@keyframes surdo-sign-enter {
+  from { opacity: 0.35; transform: translateX(7px) scale(0.94); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+.surdo-avatar {
+  animation: surdo-avatar-breathe 2.8s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+.surdo-sign-hand {
+  animation: surdo-sign-enter 160ms ease-out;
+  transform-origin: center bottom;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .surdo-avatar,
+  .surdo-sign-hand {
+    animation: none;
+  }
 }
 
 /* Transcript highlight */

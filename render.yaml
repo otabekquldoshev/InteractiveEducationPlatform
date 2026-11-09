@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: imkon-talim-demo
+    runtime: node
+    plan: free
+    buildCommand: corepack pnpm install --frozen-lockfile --prod=false && corepack pnpm db:generate && corepack pnpm build && corepack pnpm db:deploy && corepack pnpm db:seed
+    startCommand: corepack pnpm start:api
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        value: file:./dev.db
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ACCESS_TOKEN_TTL
+        value: 15m
+      - key: REFRESH_TOKEN_DAYS
+        value: 30
+      - key: MAX_UPLOAD_MB
+        value: 50

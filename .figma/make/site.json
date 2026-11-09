@@ -1,10 +1,18 @@
 {
-  "description": "An interactive e-learning platform designed for students with disabilities, offering accessible courses, video lessons, and personalized learning experiences.",
+  "title": "Imkon Ta’lim — inklyuziv ta’lim platformasi",
+  "description": "Barcha o‘quvchilar uchun qulay video darslar, testlar va moslashtirilgan ta’lim imkoniyatlarini taqdim etuvchi inklyuziv ta’lim platformasi.",
+  "language": "uz",
+  "icons": {
+    "icon": "/brand/eduaccess-mark.png"
+  },
+  "openGraph": {
+    "image": "/brand/eduaccess-mark.png"
+  },
   "robots": {
     "index": false
   },
   "accessibility": {
-    "addBypassLinks": false,
+    "addBypassLinks": true,
     "ignoreReducedMotion": false
   }
 }

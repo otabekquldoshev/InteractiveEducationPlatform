@@ -3,12 +3,19 @@ dist/
 build/
 .cache/
 .env*
+!.env.example
+server/uploads/*
+!server/uploads/.gitkeep
 .vite/
 vite.config.*.timestamp-*
 *.tsbuildinfo
 *-debug.log*
 logs/
 *.log
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
 .claude-replay.*
 .tmp-*
 

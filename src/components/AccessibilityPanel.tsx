@@ -1,28 +1,41 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react"
 import {
-  X, Type, Eye, Moon, Zap, BookOpen, AlignLeft, Space,
-  Square, Crosshair, Keyboard, Subtitles, Volume2, RotateCcw
-} from "lucide-react";
-import { useAccessibility } from "../contexts/AccessibilityContext";
-import { useLanguage } from "../contexts/LanguageContext";
+  X,
+  Type,
+  Eye,
+  Moon,
+  Zap,
+  BookOpen,
+  AlignLeft,
+  Space,
+  Square,
+  Crosshair,
+  Keyboard,
+  Subtitles,
+  Volume2,
+  RotateCcw,
+} from "lucide-react"
+import { useAccessibility } from "../contexts/AccessibilityContext"
+import { useLanguage } from "../contexts/LanguageContext"
 
 export default function AccessibilityPanel() {
-  const { prefs, setPref, resetPrefs, panelOpen, setPanelOpen } = useAccessibility();
-  const { t } = useLanguage();
-  const panelRef = useRef<HTMLDivElement>(null);
+  const { prefs, setPref, resetPrefs, panelOpen, setPanelOpen } =
+    useAccessibility()
+  const { t } = useLanguage()
+  const panelRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!panelOpen) return;
+    if (!panelOpen) return
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setPanelOpen(false);
-    };
-    document.addEventListener("keydown", handler);
-    return () => document.removeEventListener("keydown", handler);
-  }, [panelOpen, setPanelOpen]);
+      if (e.key === "Escape") setPanelOpen(false)
+    }
+    document.addEventListener("keydown", handler)
+    return () => document.removeEventListener("keydown", handler)
+  }, [panelOpen, setPanelOpen])
 
   useEffect(() => {
-    if (panelOpen) panelRef.current?.focus();
-  }, [panelOpen]);
+    if (panelOpen) panelRef.current?.focus()
+  }, [panelOpen])
 
   return (
     <>
@@ -31,7 +44,7 @@ export default function AccessibilityPanel() {
         onClick={() => setPanelOpen(!panelOpen)}
         aria-label={t("accessibility")}
         aria-expanded={panelOpen}
-        className="fixed bottom-24 md:bottom-6 right-5 md:right-6 z-50 w-14 h-14 bg-blue-600 text-white rounded-2xl shadow-lg shadow-blue-900/20 hover:bg-blue-700 transition-colors flex items-center justify-center text-2xl border border-blue-500"
+        className="fixed bottom-24 md:bottom-6 right-5 md:right-6 z-50 w-14 h-14 bg-rose-600 text-white rounded-2xl shadow-lg shadow-rose-900/20 hover:bg-rose-700 transition-colors flex items-center justify-center text-2xl border border-rose-500"
         title={t("accessibility")}
       >
         ♿
@@ -59,8 +72,12 @@ export default function AccessibilityPanel() {
       >
         <div className="sticky top-0 bg-white border-b border-slate-100 p-4 flex items-center justify-between">
           <div>
-            <h2 className="font-semibold text-slate-900">{t("accessibility")}</h2>
-            <p className="text-xs text-slate-500 mt-0.5">{t("accessibilityDesc")}</p>
+            <h2 className="font-semibold text-slate-900">
+              {t("accessibility")}
+            </h2>
+            <p className="text-xs text-slate-500 mt-0.5">
+              {t("accessibilityDesc")}
+            </p>
           </div>
           <button
             onClick={() => setPanelOpen(false)}
@@ -76,18 +93,26 @@ export default function AccessibilityPanel() {
           <Section icon={<Type className="w-4 h-4" />} title={t("textSize")}>
             <div className="flex items-center gap-3">
               <button
-                onClick={() => setPref("fontSize", Math.max(80, prefs.fontSize - 10))}
-                className="px-3 py-1.5 border border-slate-200 rounded-lg text-sm hover:bg-slate-50 font-bold"
+                onClick={() =>
+                  setPref("fontSize", Math.max(80, prefs.fontSize - 10))
+                }
+                className="px-3 py-1.5 border border-slate-200 rounded-lg text-sm hover:bg-[#fff9fb] font-bold"
                 aria-label={t("decreaseText")}
-              >A-</button>
+              >
+                A-
+              </button>
               <div className="flex-1 text-center text-sm font-medium text-slate-700">
                 {prefs.fontSize}%
               </div>
               <button
-                onClick={() => setPref("fontSize", Math.min(150, prefs.fontSize + 10))}
-                className="px-3 py-1.5 border border-slate-200 rounded-lg text-sm hover:bg-slate-50 font-bold"
+                onClick={() =>
+                  setPref("fontSize", Math.min(150, prefs.fontSize + 10))
+                }
+                className="px-3 py-1.5 border border-slate-200 rounded-lg text-sm hover:bg-[#fff9fb] font-bold"
                 aria-label={t("increaseText")}
-              >A+</button>
+              >
+                A+
+              </button>
             </div>
           </Section>
 
@@ -121,7 +146,10 @@ export default function AccessibilityPanel() {
             />
           </Section>
 
-          <Section icon={<AlignLeft className="w-4 h-4" />} title={t("lineSpacing")}>
+          <Section
+            icon={<AlignLeft className="w-4 h-4" />}
+            title={t("lineSpacing")}
+          >
             <input
               type="range"
               min={1}
@@ -139,7 +167,10 @@ export default function AccessibilityPanel() {
             </div>
           </Section>
 
-          <Section icon={<Space className="w-4 h-4" />} title={t("letterSpacing")}>
+          <Section
+            icon={<Space className="w-4 h-4" />}
+            title={t("letterSpacing")}
+          >
             <input
               type="range"
               min={0}
@@ -165,7 +196,10 @@ export default function AccessibilityPanel() {
             />
           </Section>
 
-          <Section icon={<Crosshair className="w-4 h-4" />} title={t("navigation")}>
+          <Section
+            icon={<Crosshair className="w-4 h-4" />}
+            title={t("navigation")}
+          >
             <Toggle
               label={t("focus")}
               checked={prefs.focusIndicator}
@@ -178,7 +212,10 @@ export default function AccessibilityPanel() {
             />
           </Section>
 
-          <Section icon={<Subtitles className="w-4 h-4" />} title={t("subtitles")}>
+          <Section
+            icon={<Subtitles className="w-4 h-4" />}
+            title={t("subtitles")}
+          >
             <Toggle
               label={t("subtitlesAlways")}
               checked={prefs.alwaysShowSubtitles}
@@ -194,14 +231,18 @@ export default function AccessibilityPanel() {
             />
             {prefs.textToSpeech && (
               <div className="mt-2">
-                <label className="text-xs text-slate-500 mb-1 block">{t("voiceSpeed")}</label>
+                <label className="text-xs text-slate-500 mb-1 block">
+                  {t("voiceSpeed")}
+                </label>
                 <input
                   type="range"
                   min={0.5}
                   max={2}
                   step={0.25}
                   value={prefs.speechRate}
-                  onChange={(e) => setPref("speechRate", Number(e.target.value))}
+                  onChange={(e) =>
+                    setPref("speechRate", Number(e.target.value))
+                  }
                   className="w-full"
                   aria-label={t("voiceSpeed")}
                 />
@@ -217,7 +258,7 @@ export default function AccessibilityPanel() {
           {/* Reset */}
           <button
             onClick={resetPrefs}
-            className="w-full flex items-center justify-center gap-2 py-2.5 border-2 border-slate-200 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+            className="w-full flex items-center justify-center gap-2 py-2.5 border-2 border-slate-200 rounded-xl text-sm font-medium text-slate-600 hover:bg-[#fff9fb] transition-colors"
           >
             <RotateCcw className="w-4 h-4" />
             {t("reset")}
@@ -225,31 +266,49 @@ export default function AccessibilityPanel() {
         </div>
       </div>
     </>
-  );
+  )
 }
 
-function Section({ icon, title, children }: { icon: React.ReactNode; title: string; children: React.ReactNode }) {
+function Section({
+  icon,
+  title,
+  children,
+}: {
+  icon: React.ReactNode
+  title: string
+  children: React.ReactNode
+}) {
   return (
     <div>
       <div className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-        <span className="text-teal-600">{icon}</span>
+        <span className="text-violet-600">{icon}</span>
         {title}
       </div>
       <div className="space-y-2">{children}</div>
     </div>
-  );
+  )
 }
 
-function Toggle({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }) {
+function Toggle({
+  label,
+  checked,
+  onChange,
+}: {
+  label: string
+  checked: boolean
+  onChange: (v: boolean) => void
+}) {
   return (
     <label className="flex items-center justify-between cursor-pointer group">
-      <span className="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">{label}</span>
+      <span className="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">
+        {label}
+      </span>
       <button
         role="switch"
         aria-checked={checked}
         onClick={() => onChange(!checked)}
-        className={`relative w-10 h-5 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${
-          checked ? "bg-teal-600" : "bg-slate-200"
+        className={`relative w-10 h-5 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 ${
+          checked ? "bg-violet-600" : "bg-slate-200"
         }`}
       >
         <span
@@ -259,5 +318,5 @@ function Toggle({ label, checked, onChange }: { label: string; checked: boolean;
         />
       </button>
     </label>
-  );
+  )
 }

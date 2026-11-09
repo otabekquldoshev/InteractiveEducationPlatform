@@ -1,135 +1,115 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
-import type { User, UserRole } from "../types";
-import { DEMO_USERS } from "../data/mockData";
-
-interface AuthContextValue {
-  user: User | null;
-  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
-  register: (data: RegisterData) => Promise<{ success: boolean; error?: string }>;
-  logout: () => void;
-  switchRole: (role: "student" | "admin") => void;
-  updateUser: (updates: Partial<User>) => void;
-  isLoading: boolean;
-}
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react"
+import type { User, UserRole } from "../types"
+import { api, tokens } from "../lib/api"
 
 interface RegisterData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  role?: UserRole;
+  firstName: string
+  lastName: string
+  email: string
+  password: string
 }
-
-const AuthContext = createContext<AuthContextValue | null>(null);
-
-const STORAGE_KEY = "edu_current_user";
-const USERS_KEY = "edu_users";
-
-function getStoredUsers(): User[] {
-  try {
-    const stored = localStorage.getItem(USERS_KEY);
-    if (stored) return JSON.parse(stored);
-  } catch {}
-  return DEMO_USERS;
+interface AuthContextValue {
+  user: User | null
+  login: (
+    email: string,
+    password: string,
+    role: UserRole,
+  ) => Promise<{ success: boolean; error?: string }>
+  register: (data: RegisterData) => Promise<{ success: boolean; error?: string }>
+  logout: () => void
+  updateUser: (updates: Partial<User>) => void
+  isLoading: boolean
 }
-
-function saveUsers(users: User[]) {
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
-}
+type AuthResponse = { user: User; accessToken: string; refreshToken: string }
+const AuthContext = createContext<AuthContextValue | null>(null)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        setUser(JSON.parse(stored));
-      } catch {}
+    if (!tokens.access() && !tokens.refresh()) {
+      setIsLoading(false)
+      return
     }
-    // Authentication is intentionally bypassed in this interactive demo.
-    // A learner workspace is available immediately; admin mode is selected in the UI.
-    if (!localStorage.getItem(USERS_KEY)) {
-      saveUsers(DEMO_USERS);
-    }
-    if (!stored) {
-      const learner = DEMO_USERS.find((item) => item.role === "student") || null;
-      setUser(learner);
-      if (learner) localStorage.setItem(STORAGE_KEY, JSON.stringify(learner));
-    }
-    setIsLoading(false);
-  }, []);
+    api<{ user: User }>("/auth/me")
+      .then((result) => setUser(result.user))
+      .catch(() => tokens.clear())
+      .finally(() => setIsLoading(false))
+  }, [])
 
-  const login = async (email: string, password: string) => {
-    await new Promise((r) => setTimeout(r, 600));
-    const users = getStoredUsers();
-    const found = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
-    if (!found) return { success: false, error: "Foydalanuvchi topilmadi" };
-    // Demo: any password works for demo accounts, real ones need match
-    const stored = localStorage.getItem(`edu_pwd_${found.id}`);
-    if (stored && stored !== password) {
-      return { success: false, error: "Parol noto'g'ri" };
+  const login = async (email: string, password: string, role: UserRole) => {
+    try {
+      const result = await api<AuthResponse>("/auth/login", {
+        method: "POST",
+        body: { email, password, role },
+        retry: false,
+      })
+      tokens.set(result.accessToken, result.refreshToken)
+      setUser(result.user)
+      return { success: true }
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Kirish xatosi",
+      }
     }
-    setUser(found);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(found));
-    return { success: true };
-  };
+  }
 
   const register = async (data: RegisterData) => {
-    await new Promise((r) => setTimeout(r, 600));
-    const users = getStoredUsers();
-    if (users.find((u) => u.email.toLowerCase() === data.email.toLowerCase())) {
-      return { success: false, error: "Bu email allaqachon ro'yxatdan o'tgan" };
+    try {
+      const result = await api<AuthResponse>("/auth/register", {
+        method: "POST",
+        body: data,
+        retry: false,
+      })
+      tokens.set(result.accessToken, result.refreshToken)
+      setUser(result.user)
+      return { success: true }
+    } catch (error) {
+      return {
+        success: false,
+        error:
+          error instanceof Error ? error.message : "Ro'yxatdan o'tish xatosi",
+      }
     }
-    const newUser: User = {
-      id: `u${Date.now()}`,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
-      role: data.role || "student",
-      accessibilitySetupDone: false,
-      createdAt: new Date().toISOString().split("T")[0],
-    };
-    const updated = [...users, newUser];
-    saveUsers(updated);
-    localStorage.setItem(`edu_pwd_${newUser.id}`, data.password);
-    setUser(newUser);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newUser));
-    return { success: true };
-  };
+  }
 
   const logout = () => {
-    const learner = getStoredUsers().find((item) => item.role === "student") || null;
-    setUser(learner);
-    if (learner) localStorage.setItem(STORAGE_KEY, JSON.stringify(learner));
-  };
-
-  const switchRole = (role: "student" | "admin") => {
-    const selected = getStoredUsers().find((item) => item.role === role);
-    if (!selected) return;
-    setUser(selected);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(selected));
-  };
+    const refreshToken = tokens.refresh()
+    if (refreshToken)
+      void api("/auth/logout", {
+        method: "POST",
+        body: { refreshToken },
+        retry: false,
+      }).catch(() => undefined)
+    tokens.clear()
+    setUser(null)
+  }
 
   const updateUser = (updates: Partial<User>) => {
-    if (!user) return;
-    const updated = { ...user, ...updates };
-    setUser(updated);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-    const users = getStoredUsers();
-    saveUsers(users.map((u) => (u.id === updated.id ? updated : u)));
-  };
-
+    setUser((current) => (current ? { ...current, ...updates } : current))
+    void api<{ user: User }>("/auth/me", { method: "PATCH", body: updates })
+      .then((result) => setUser(result.user))
+      .catch(() => undefined)
+  }
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, switchRole, updateUser, isLoading }}>
+    <AuthContext.Provider
+      value={{ user, login, register, logout, updateUser, isLoading }}
+    >
       {children}
     </AuthContext.Provider>
-  );
+  )
 }
 
 export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used inside AuthProvider");
-  return ctx;
+  const context = useContext(AuthContext)
+  if (!context) throw new Error("useAuth must be used inside AuthProvider")
+  return context
 }

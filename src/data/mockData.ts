@@ -1,4 +1,4 @@
-import type { Course, Module, Quiz, User, Enrollment } from "../types";
+import type { Course, Module, Quiz, User, Enrollment } from "../types"
 
 export const DEMO_USERS: User[] = [
   {
@@ -12,10 +12,10 @@ export const DEMO_USERS: User[] = [
   },
   {
     id: "u2",
-    firstName: "Malika",
-    lastName: "Yusupova",
-    email: "teacher@demo.uz",
-    role: "teacher",
+    firstName: "Dilnoza",
+    lastName: "Ergasheva",
+    email: "student2@demo.uz",
+    role: "student",
     accessibilitySetupDone: true,
     createdAt: "2024-01-15",
   },
@@ -28,7 +28,7 @@ export const DEMO_USERS: User[] = [
     accessibilitySetupDone: true,
     createdAt: "2023-06-10",
   },
-];
+]
 
 export const DEMO_COURSES: Course[] = [
   {
@@ -40,7 +40,8 @@ export const DEMO_COURSES: Course[] = [
     teacherName: "Malika Yusupova",
     category: "Kompyuter savodxonligi",
     level: "boshlangich",
-    thumbnail: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&h=340&fit=crop&auto=format",
+    thumbnail:
+      "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&h=340&fit=crop&auto=format",
     duration: "24 soat",
     lessonsCount: 48,
     modulesCount: 5,
@@ -54,12 +55,14 @@ export const DEMO_COURSES: Course[] = [
   {
     id: "c2",
     title: "Python dasturlash asoslari",
-    description: "Python dasturlash tili asoslarini o'rganish. O'zgaruvchilar, sikllar, funksiyalar va ob'ektga yo'naltirilgan dasturlash.",
+    description:
+      "Python dasturlash tili asoslarini o'rganish. O'zgaruvchilar, sikllar, funksiyalar va ob'ektga yo'naltirilgan dasturlash.",
     teacherId: "u2",
     teacherName: "Malika Yusupova",
     category: "Dasturlash",
     level: "orta",
-    thumbnail: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&h=340&fit=crop&auto=format",
+    thumbnail:
+      "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&h=340&fit=crop&auto=format",
     duration: "36 soat",
     lessonsCount: 62,
     modulesCount: 7,
@@ -73,12 +76,14 @@ export const DEMO_COURSES: Course[] = [
   {
     id: "c3",
     title: "Grafik dizayn asoslari",
-    description: "Adobe Photoshop va Figma yordamida professional grafik dizayn ko'nikmalarini rivojlantirish.",
+    description:
+      "Zamonaviy grafik dizayn dasturlari yordamida professional ko‘nikmalarni rivojlantirish.",
     teacherId: "u2",
     teacherName: "Malika Yusupova",
     category: "Dizayn",
     level: "boshlangich",
-    thumbnail: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&h=340&fit=crop&auto=format",
+    thumbnail:
+      "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&h=340&fit=crop&auto=format",
     duration: "18 soat",
     lessonsCount: 36,
     modulesCount: 4,
@@ -92,12 +97,14 @@ export const DEMO_COURSES: Course[] = [
   {
     id: "c4",
     title: "Internet xavfsizligi",
-    description: "Onlayn xavfsizlik asoslari, kibertahdidlardan himoya qilish va xavfsiz internet foydalanish.",
+    description:
+      "Onlayn xavfsizlik asoslari, kibertahdidlardan himoya qilish va xavfsiz internet foydalanish.",
     teacherId: "u2",
     teacherName: "Malika Yusupova",
     category: "IT",
     level: "boshlangich",
-    thumbnail: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&h=340&fit=crop&auto=format",
+    thumbnail:
+      "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&h=340&fit=crop&auto=format",
     duration: "12 soat",
     lessonsCount: 24,
     modulesCount: 3,
@@ -111,12 +118,14 @@ export const DEMO_COURSES: Course[] = [
   {
     id: "c5",
     title: "Web dasturlash: HTML va CSS",
-    description: "Web sahifalar yaratishni o'rganish. HTML struktura va CSS dizayn asoslari.",
+    description:
+      "Web sahifalar yaratishni o'rganish. HTML struktura va CSS dizayn asoslari.",
     teacherId: "u2",
     teacherName: "Malika Yusupova",
     category: "Dasturlash",
     level: "boshlangich",
-    thumbnail: "https://images.unsplash.com/photo-1621839673705-6617adf9e890?w=600&h=340&fit=crop&auto=format",
+    thumbnail:
+      "https://images.unsplash.com/photo-1621839673705-6617adf9e890?w=600&h=340&fit=crop&auto=format",
     duration: "20 soat",
     lessonsCount: 40,
     modulesCount: 5,
@@ -127,7 +136,7 @@ export const DEMO_COURSES: Course[] = [
     rating: 4.5,
     createdAt: "2024-05-10",
   },
-];
+]
 
 export const DEMO_MODULES: Module[] = [
   {
@@ -136,10 +145,40 @@ export const DEMO_MODULES: Module[] = [
     title: "1. Kompyuter asoslari",
     order: 1,
     lessons: [
-      { id: "l1", moduleId: "m1", title: "Kompyuter nima?", type: "video", duration: "12:30", order: 1, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { id: "l2", moduleId: "m1", title: "Kompyuter qurilmalari", type: "video", duration: "18:45", order: 2, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { id: "l3", moduleId: "m1", title: "Operatsion tizimlar", type: "video", duration: "22:10", order: 3, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { id: "l4", moduleId: "m1", title: "Modul testi", type: "quiz", order: 4 },
+      {
+        id: "l1",
+        moduleId: "m1",
+        title: "Kompyuter nima?",
+        type: "video",
+        duration: "12:30",
+        order: 1,
+        videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+      },
+      {
+        id: "l2",
+        moduleId: "m1",
+        title: "Kompyuter qurilmalari",
+        type: "video",
+        duration: "18:45",
+        order: 2,
+        videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+      },
+      {
+        id: "l3",
+        moduleId: "m1",
+        title: "Operatsion tizimlar",
+        type: "video",
+        duration: "22:10",
+        order: 3,
+        videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+      },
+      {
+        id: "l4",
+        moduleId: "m1",
+        title: "Modul testi",
+        type: "quiz",
+        order: 4,
+      },
     ],
   },
   {
@@ -148,10 +187,40 @@ export const DEMO_MODULES: Module[] = [
     title: "2. Windows operatsion tizimi",
     order: 2,
     lessons: [
-      { id: "l5", moduleId: "m2", title: "Windows interfeysi", type: "video", duration: "15:20", order: 1, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { id: "l6", moduleId: "m2", title: "Fayllar va papkalar", type: "video", duration: "19:00", order: 2, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { id: "l7", moduleId: "m2", title: "Dasturlar o'rnatish", type: "video", duration: "11:15", order: 3, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { id: "l8", moduleId: "m2", title: "Modul testi", type: "quiz", order: 4 },
+      {
+        id: "l5",
+        moduleId: "m2",
+        title: "Windows interfeysi",
+        type: "video",
+        duration: "15:20",
+        order: 1,
+        videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+      },
+      {
+        id: "l6",
+        moduleId: "m2",
+        title: "Fayllar va papkalar",
+        type: "video",
+        duration: "19:00",
+        order: 2,
+        videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+      },
+      {
+        id: "l7",
+        moduleId: "m2",
+        title: "Dasturlar o'rnatish",
+        type: "video",
+        duration: "11:15",
+        order: 3,
+        videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+      },
+      {
+        id: "l8",
+        moduleId: "m2",
+        title: "Modul testi",
+        type: "quiz",
+        order: 4,
+      },
     ],
   },
   {
@@ -160,10 +229,40 @@ export const DEMO_MODULES: Module[] = [
     title: "3. Microsoft Word",
     order: 3,
     lessons: [
-      { id: "l9", moduleId: "m3", title: "Word dasturiga kirish", type: "video", duration: "14:00", order: 1, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { id: "l10", moduleId: "m3", title: "Matn formatlash", type: "video", duration: "20:30", order: 2, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { id: "l11", moduleId: "m3", title: "Jadvallar va rasmlar", type: "video", duration: "16:45", order: 3, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { id: "l12", moduleId: "m3", title: "Modul testi", type: "quiz", order: 4 },
+      {
+        id: "l9",
+        moduleId: "m3",
+        title: "Word dasturiga kirish",
+        type: "video",
+        duration: "14:00",
+        order: 1,
+        videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+      },
+      {
+        id: "l10",
+        moduleId: "m3",
+        title: "Matn formatlash",
+        type: "video",
+        duration: "20:30",
+        order: 2,
+        videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+      },
+      {
+        id: "l11",
+        moduleId: "m3",
+        title: "Jadvallar va rasmlar",
+        type: "video",
+        duration: "16:45",
+        order: 3,
+        videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+      },
+      {
+        id: "l12",
+        moduleId: "m3",
+        title: "Modul testi",
+        type: "quiz",
+        order: 4,
+      },
     ],
   },
   {
@@ -172,10 +271,40 @@ export const DEMO_MODULES: Module[] = [
     title: "4. Microsoft Excel",
     order: 4,
     lessons: [
-      { id: "l13", moduleId: "m4", title: "Excel asoslari", type: "video", duration: "18:00", order: 1, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { id: "l14", moduleId: "m4", title: "Formulalar va funksiyalar", type: "video", duration: "25:00", order: 2, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { id: "l15", moduleId: "m4", title: "Diagrammalar", type: "video", duration: "14:30", order: 3, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { id: "l16", moduleId: "m4", title: "Modul testi", type: "quiz", order: 4 },
+      {
+        id: "l13",
+        moduleId: "m4",
+        title: "Excel asoslari",
+        type: "video",
+        duration: "18:00",
+        order: 1,
+        videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+      },
+      {
+        id: "l14",
+        moduleId: "m4",
+        title: "Formulalar va funksiyalar",
+        type: "video",
+        duration: "25:00",
+        order: 2,
+        videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+      },
+      {
+        id: "l15",
+        moduleId: "m4",
+        title: "Diagrammalar",
+        type: "video",
+        duration: "14:30",
+        order: 3,
+        videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+      },
+      {
+        id: "l16",
+        moduleId: "m4",
+        title: "Modul testi",
+        type: "quiz",
+        order: 4,
+      },
     ],
   },
   {
@@ -184,27 +313,112 @@ export const DEMO_MODULES: Module[] = [
     title: "5. Internet va kiberxavfsizlik",
     order: 5,
     lessons: [
-      { id: "l17", moduleId: "m5", title: "Internet asoslari", type: "video", duration: "13:00", order: 1, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { id: "l18", moduleId: "m5", title: "Kiberxavfsizlik asoslari", type: "video", duration: "22:45", order: 2, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { id: "l19", moduleId: "m5", title: "Xavfsiz parollar", type: "video", duration: "17:20", order: 3, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { id: "l20", moduleId: "m5", title: "Yakuniy test", type: "quiz", order: 4 },
+      {
+        id: "l17",
+        moduleId: "m5",
+        title: "Internet asoslari",
+        type: "video",
+        duration: "13:00",
+        order: 1,
+        videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+      },
+      {
+        id: "l18",
+        moduleId: "m5",
+        title: "Kiberxavfsizlik asoslari",
+        type: "video",
+        duration: "22:45",
+        order: 2,
+        videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+      },
+      {
+        id: "l19",
+        moduleId: "m5",
+        title: "Xavfsiz parollar",
+        type: "video",
+        duration: "17:20",
+        order: 3,
+        videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+      },
+      {
+        id: "l20",
+        moduleId: "m5",
+        title: "Yakuniy test",
+        type: "quiz",
+        order: 4,
+      },
     ],
   },
-];
+]
 
 export const DEMO_TRANSCRIPTS = [
-  { id: "t1", startTime: 0, endTime: 5, text: "Assalomu alaykum, bugungi darsimizga xush kelibsiz." },
-  { id: "t2", startTime: 6, endTime: 12, text: "Bugun biz kompyuter nima ekanligi haqida gaplashamiz." },
-  { id: "t3", startTime: 13, endTime: 20, text: "Kompyuter — ma'lumotlarni qayta ishlash va saqlash uchun mo'ljallangan elektron qurilma." },
-  { id: "t4", startTime: 21, endTime: 30, text: "U ikki asosiy qismdan iborat: hardware va software." },
-  { id: "t5", startTime: 31, endTime: 40, text: "Hardware — bu kompyuterning fizik qismlari: monitor, klaviatura, sichqoncha va boshqalar." },
-  { id: "t6", startTime: 41, endTime: 50, text: "Software — bu kompyuterda ishlayotgan dasturlar va operatsion tizim." },
-  { id: "t7", startTime: 51, endTime: 60, text: "Keling, har birini batafsil ko'rib chiqamiz." },
-  { id: "t8", startTime: 61, endTime: 75, text: "Markaziy protsessor (CPU) kompyuterning 'miyasi' deb ataladi." },
-  { id: "t9", startTime: 76, endTime: 90, text: "RAM — bu operativ xotira. Kompyuter hozir ishlatayotgan ma'lumotlarni saqlaydi." },
-  { id: "t10", startTime: 91, endTime: 105, text: "Qattiq disk (HDD yoki SSD) esa doimiy xotira bo'lib, barcha fayllaringiz u yerda saqlanadi." },
-  { id: "t11", startTime: 106, endTime: 120, text: "Darsimiz oxirida test topshirishingizni eslatib o'tamiz. Omad tilaymiz!" },
-];
+  {
+    id: "t1",
+    startTime: 0,
+    endTime: 5,
+    text: "Assalomu alaykum, bugungi darsimizga xush kelibsiz.",
+  },
+  {
+    id: "t2",
+    startTime: 6,
+    endTime: 12,
+    text: "Bugun biz kompyuter nima ekanligi haqida gaplashamiz.",
+  },
+  {
+    id: "t3",
+    startTime: 13,
+    endTime: 20,
+    text: "Kompyuter — ma'lumotlarni qayta ishlash va saqlash uchun mo'ljallangan elektron qurilma.",
+  },
+  {
+    id: "t4",
+    startTime: 21,
+    endTime: 30,
+    text: "U ikki asosiy qismdan iborat: hardware va software.",
+  },
+  {
+    id: "t5",
+    startTime: 31,
+    endTime: 40,
+    text: "Hardware — bu kompyuterning fizik qismlari: monitor, klaviatura, sichqoncha va boshqalar.",
+  },
+  {
+    id: "t6",
+    startTime: 41,
+    endTime: 50,
+    text: "Software — bu kompyuterda ishlayotgan dasturlar va operatsion tizim.",
+  },
+  {
+    id: "t7",
+    startTime: 51,
+    endTime: 60,
+    text: "Keling, har birini batafsil ko'rib chiqamiz.",
+  },
+  {
+    id: "t8",
+    startTime: 61,
+    endTime: 75,
+    text: "Markaziy protsessor (CPU) kompyuterning 'miyasi' deb ataladi.",
+  },
+  {
+    id: "t9",
+    startTime: 76,
+    endTime: 90,
+    text: "RAM — bu operativ xotira. Kompyuter hozir ishlatayotgan ma'lumotlarni saqlaydi.",
+  },
+  {
+    id: "t10",
+    startTime: 91,
+    endTime: 105,
+    text: "Qattiq disk (HDD yoki SSD) esa doimiy xotira bo'lib, barcha fayllaringiz u yerda saqlanadi.",
+  },
+  {
+    id: "t11",
+    startTime: 106,
+    endTime: 120,
+    text: "Darsimiz oxirida test topshirishingizni eslatib o'tamiz. Omad tilaymiz!",
+  },
+]
 
 export const DEMO_QUIZZES: Quiz[] = [
   {
@@ -224,7 +438,8 @@ export const DEMO_QUIZZES: Quiz[] = [
           { id: "d", text: "Sichqoncha" },
         ],
         correctAnswers: ["b"],
-        explanation: "CPU (Central Processing Unit) — markaziy protsessor kompyuterning asosiy hisoblash qurilmasi hisoblanadi.",
+        explanation:
+          "CPU (Central Processing Unit) — markaziy protsessor kompyuterning asosiy hisoblash qurilmasi hisoblanadi.",
       },
       {
         id: "qu2",
@@ -237,7 +452,8 @@ export const DEMO_QUIZZES: Quiz[] = [
           { id: "d", text: "Operatsion tizim" },
         ],
         correctAnswers: ["c"],
-        explanation: "RAM (Random Access Memory) — operativ xotira bo'lib, kompyuter hozir ishlatayotgan ma'lumotlarni vaqtinchalik saqlaydi.",
+        explanation:
+          "RAM (Random Access Memory) — operativ xotira bo'lib, kompyuter hozir ishlatayotgan ma'lumotlarni vaqtinchalik saqlaydi.",
       },
       {
         id: "qu3",
@@ -250,7 +466,8 @@ export const DEMO_QUIZZES: Quiz[] = [
           { id: "d", text: "Musiqa tinglash" },
         ],
         correctAnswers: ["b"],
-        explanation: "Microsoft Excel elektron jadvallar yaratish, hisob-kitob va ma'lumotlarni tahlil qilish uchun ishlatiladi.",
+        explanation:
+          "Microsoft Excel elektron jadvallar yaratish, hisob-kitob va ma'lumotlarni tahlil qilish uchun ishlatiladi.",
       },
       {
         id: "qu4",
@@ -263,7 +480,8 @@ export const DEMO_QUIZZES: Quiz[] = [
           { id: "d", text: "Microsoft Word" },
         ],
         correctAnswers: ["a", "c"],
-        explanation: "Monitor va klaviatura — fizik qurilmalar (hardware). Windows va MS Word esa dasturlar (software).",
+        explanation:
+          "Monitor va klaviatura — fizik qurilmalar (hardware). Windows va MS Word esa dasturlar (software).",
       },
       {
         id: "qu5",
@@ -274,7 +492,8 @@ export const DEMO_QUIZZES: Quiz[] = [
           { id: "false", text: "Noto'g'ri" },
         ],
         correctAnswers: ["true"],
-        explanation: "SSD (Solid State Drive) disklar mexanik qismlari yo'qligi sababli HDD (Hard Disk Drive) diskidan ancha tezroq ishlaydi.",
+        explanation:
+          "SSD (Solid State Drive) disklar mexanik qismlari yo'qligi sababli HDD (Hard Disk Drive) diskidan ancha tezroq ishlaydi.",
       },
       {
         id: "qu6",
@@ -334,7 +553,7 @@ export const DEMO_QUIZZES: Quiz[] = [
       },
     ],
   },
-];
+]
 
 export const DEMO_ENROLLMENTS: Enrollment[] = [
   {
@@ -343,7 +562,21 @@ export const DEMO_ENROLLMENTS: Enrollment[] = [
     courseId: "c1",
     enrolledAt: "2024-09-05",
     progress: 72,
-    completedLessons: ["l1", "l2", "l3", "l4", "l5", "l6", "l7", "l8", "l9", "l10", "l11", "l12", "l13"],
+    completedLessons: [
+      "l1",
+      "l2",
+      "l3",
+      "l4",
+      "l5",
+      "l6",
+      "l7",
+      "l8",
+      "l9",
+      "l10",
+      "l11",
+      "l12",
+      "l13",
+    ],
     lastLessonId: "l13",
     lastActivityAt: "2024-12-20",
   },
@@ -357,4 +590,4 @@ export const DEMO_ENROLLMENTS: Enrollment[] = [
     lastLessonId: "l18",
     lastActivityAt: "2024-12-18",
   },
-];
+]
