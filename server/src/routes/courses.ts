@@ -103,6 +103,7 @@ coursesRouter.get("/:id", optionalAuth, async (req, res) => {
                   title: true,
                   status: true,
                   passingScore: true,
+                  isRequired: true,
                   interruptAtSeconds: true,
                 },
                 orderBy: { createdAt: "asc" },
@@ -137,11 +138,18 @@ coursesRouter.get("/:id", optionalAuth, async (req, res) => {
         type: lesson.type.toLowerCase(),
         order: lesson.order,
         status: lesson.status.toLowerCase(),
-        videoUrl: lesson.video?.videoUrl,
-        duration: lesson.video?.duration
+        videoUrl:
+          lesson.video && (canPreview || lesson.video.published)
+            ? lesson.video.videoUrl
+            : undefined,
+        duration:
+          lesson.video &&
+          (canPreview || lesson.video.published) &&
+          lesson.video.duration
           ? `${Math.floor(lesson.video.duration / 60)}:${String(lesson.video.duration % 60).padStart(2, "0")}`
           : undefined,
-        video: lesson.video
+        video:
+          lesson.video && (canPreview || lesson.video.published)
           ? { ...lesson.video, size: Number(lesson.video.size) }
           : null,
         attachments: lesson.attachments.map((item) => ({
@@ -157,6 +165,7 @@ coursesRouter.get("/:id", optionalAuth, async (req, res) => {
             title: quiz.title,
             status: quiz.status.toLowerCase(),
             passingScore: quiz.passingScore,
+            isRequired: quiz.isRequired,
             interruptAtSeconds: quiz.interruptAtSeconds,
           })),
         quiz: (() => {
@@ -172,6 +181,7 @@ coursesRouter.get("/:id", optionalAuth, async (req, res) => {
                 title: quiz.title,
                 status: quiz.status.toLowerCase(),
                 passingScore: quiz.passingScore,
+                isRequired: quiz.isRequired,
                 interruptAtSeconds: quiz.interruptAtSeconds,
               }
             : null

@@ -24,26 +24,35 @@ export async function calculateEnrollmentMetrics(
     where: { module: { courseId }, status: PublishStatus.PUBLISHED },
     select: {
       id: true,
-      quizzes: { select: { id: true, status: true, passingScore: true } },
+      quizzes: {
+        select: {
+          id: true,
+          status: true,
+          passingScore: true,
+          isRequired: true,
+        },
+      },
     },
   })
   const completions = await prisma.lessonCompletion.findMany({
     where: { enrollmentId },
     select: { lessonId: true, completedAt: true },
   })
-  // Sertifikat hisobi testning joylashuviga bog‘liq emas: alohida yakuniy,
-  // video tugagandan keyingi va video ichidagi barcha nashr qilingan testlar
-  // o‘quvchining eng yaxshi natijasi bilan hisobga olinadi.
-  const publishedQuizzes = lessons
+  // Faqat administrator majburiy deb belgilagan, nashr qilingan testlar
+  // progress va sertifikatni bloklaydi. Ixtiyoriy test natijasi saqlanadi,
+  // lekin kursni tugatishga ta'sir qilmaydi.
+  const requiredQuizzes = lessons
     .flatMap((lesson) => lesson.quizzes)
     .filter((quiz): quiz is NonNullable<typeof quiz> =>
-      Boolean(quiz && quiz.status === PublishStatus.PUBLISHED),
+      Boolean(
+        quiz && quiz.status === PublishStatus.PUBLISHED && quiz.isRequired,
+      ),
     )
-  const attempts = publishedQuizzes.length
+  const attempts = requiredQuizzes.length
     ? await prisma.quizAttempt.findMany({
         where: {
           userId,
-          quizId: { in: publishedQuizzes.map((quiz) => quiz.id) },
+          quizId: { in: requiredQuizzes.map((quiz) => quiz.id) },
         },
         select: { quizId: true, percentage: true, completedAt: true },
       })
@@ -62,12 +71,14 @@ export async function calculateEnrollmentMetrics(
   )
   const effectiveCompleted = lessons.filter((lesson) => {
     if (!completedLessonIds.has(lesson.id)) return false
-    const requiredQuizzes = lesson.quizzes.filter(
-      (quiz) => quiz.status === PublishStatus.PUBLISHED,
+    const lessonRequiredQuizzes = lesson.quizzes.filter(
+      (quiz) => quiz.status === PublishStatus.PUBLISHED && quiz.isRequired,
     )
-    return requiredQuizzes.every((quiz) => {
+    return lessonRequiredQuizzes.every((quiz) => {
       const best = bestAttempts.get(quiz.id)
-      return Boolean(best) && best!.percentage >= Math.max(70, quiz.passingScore)
+      return (
+        Boolean(best) && best!.percentage >= Math.max(70, quiz.passingScore)
+      )
     })
   }).length
   const progress = lessons.length
@@ -76,18 +87,18 @@ export async function calculateEnrollmentMetrics(
   const certificateEligible =
     progress === 100 &&
     lessons.length > 0 &&
-    publishedQuizzes.every(
+    requiredQuizzes.every(
       (quiz) =>
         (bestAttempts.get(quiz.id)?.percentage || 0) >=
         Math.max(70, quiz.passingScore),
     )
   const certificateScore = certificateEligible
-    ? publishedQuizzes.length
+    ? requiredQuizzes.length
       ? Math.round(
-          publishedQuizzes.reduce(
+          requiredQuizzes.reduce(
             (sum, quiz) => sum + (bestAttempts.get(quiz.id)?.percentage || 0),
             0,
-          ) / publishedQuizzes.length,
+          ) / requiredQuizzes.length,
         )
       : 100
     : undefined
@@ -423,7 +434,12 @@ learningRouter.post(
       },
       include: {
         quizzes: {
-          select: { id: true, status: true, interruptAtSeconds: true },
+          select: {
+            id: true,
+            status: true,
+            isRequired: true,
+            interruptAtSeconds: true,
+          },
         },
       },
     })
@@ -431,6 +447,7 @@ learningRouter.post(
     const checkpoints = lesson.quizzes.filter(
       (quiz) =>
         quiz.status === PublishStatus.PUBLISHED &&
+        quiz.isRequired &&
         quiz.interruptAtSeconds !== null,
     )
     if (checkpoints.length) {

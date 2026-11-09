@@ -100,6 +100,7 @@ export interface Lesson {
     title: string
     status?: "draft" | "published" | "hidden"
     passingScore?: number
+    isRequired?: boolean
     interruptAtSeconds?: number | null
   } | null
   quizzes?: {
@@ -107,6 +108,7 @@ export interface Lesson {
     title: string
     status?: "draft" | "published" | "hidden"
     passingScore?: number
+    isRequired?: boolean
     interruptAtSeconds?: number | null
   }[]
   completed?: boolean
@@ -144,6 +146,7 @@ export interface Quiz {
   moduleId: string
   title: string
   passingScore?: number
+  isRequired?: boolean
   interruptAtSeconds?: number | null
   alreadyPassed?: boolean
   questions: Question[]

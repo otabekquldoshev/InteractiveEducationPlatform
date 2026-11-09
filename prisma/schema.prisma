@@ -228,6 +228,7 @@ model Quiz {
   lessonId           String
   title              String
   passingScore       Int           @default(70)
+  isRequired         Boolean       @default(false)
   interruptAtSeconds Int?
   status             PublishStatus @default(DRAFT)
   createdAt          DateTime      @default(now())

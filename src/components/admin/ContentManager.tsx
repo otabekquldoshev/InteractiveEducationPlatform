@@ -1013,8 +1013,6 @@ Bugun yangi mavzuni o‘rganamiz.`
     const form = new FormData()
     form.append("video", videoFile)
     form.append("title", selectedLesson.title)
-    const duration = await readVideoDuration(videoFile)
-    if (duration) form.append("duration", String(duration))
     setVideoProgress(0)
     const uploaded = await run(async () => {
       await uploadForm(
@@ -1165,6 +1163,34 @@ Bugun yangi mavzuni o‘rganamiz.`
             hint={t("video_lesson_hint")}
             icon={<Film className="h-5 w-5" />}
           >
+            {selectedLesson.status !== "published" && (
+              <div className="mb-4 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
+                <p className="font-semibold">
+                  Video saqlanadi, lekin bu dars hozir qoralama holatida.
+                </p>
+                <p className="mt-1 text-xs text-amber-800">
+                  Talabalar videoni ko‘rishi uchun darsni nashr qiling.
+                </p>
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() =>
+                    void run(
+                      () =>
+                        api(`/courses/lessons/${selectedLesson.id}`, {
+                          method: "PATCH",
+                          body: { status: "published" },
+                        }),
+                      "Dars nashr qilindi — video talabalarga ko‘rinadi",
+                    )
+                  }
+                  className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-lg bg-amber-600 px-4 font-semibold text-white disabled:opacity-50"
+                >
+                  <Upload className="h-4 w-4" />
+                  Darsni nashr qilish
+                </button>
+              </div>
+            )}
             {selectedLesson.video?.videoUrl ? (
               <div className="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
@@ -1192,7 +1218,7 @@ Bugun yangi mavzuni o‘rganamiz.`
                   </a>
                 </div>
                 <video
-                  key={selectedLesson.video.id}
+                  key={selectedLesson.video.videoUrl}
                   src={selectedLesson.video.videoUrl}
                   controls
                   preload="metadata"
@@ -1350,6 +1376,7 @@ Bugun yangi mavzuni o‘rganamiz.`
                 )}
                 {selectedLesson.video.signLanguageUrl && (
                   <video
+                    key={selectedLesson.video.signLanguageUrl}
                     src={selectedLesson.video.signLanguageUrl}
                     controls
                     muted
@@ -1802,33 +1829,6 @@ function SignLanguageRecorder({
 function formatBytes(bytes: number) {
   if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`
   return `${(bytes / 1024 / 1024).toFixed(1)} MB`
-}
-
-function readVideoDuration(file: File): Promise<number | undefined> {
-  return new Promise((resolve) => {
-    const video = document.createElement("video")
-    const url = URL.createObjectURL(file)
-    const finish = (value?: number) => {
-      URL.revokeObjectURL(url)
-      video.removeAttribute("src")
-      resolve(value)
-    }
-    const timer = window.setTimeout(() => finish(), 5000)
-    video.preload = "metadata"
-    video.onloadedmetadata = () => {
-      window.clearTimeout(timer)
-      finish(
-        Number.isFinite(video.duration)
-          ? Math.max(1, Math.round(video.duration))
-          : undefined,
-      )
-    }
-    video.onerror = () => {
-      window.clearTimeout(timer)
-      finish()
-    }
-    video.src = url
-  })
 }
 
 function MediaCard({

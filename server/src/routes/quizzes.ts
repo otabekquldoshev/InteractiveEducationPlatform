@@ -182,6 +182,7 @@ quizzesRouter.post(
       z.object({
         title: z.string().min(2).max(180),
         passingScore: z.number().int().min(70).max(100).default(70),
+        isRequired: z.boolean().default(false),
         interruptAtSeconds: z
           .number()
           .int()
@@ -215,6 +216,7 @@ quizzesRouter.post(
         lessonId: lesson.id,
         title: input.title,
         passingScore: input.passingScore,
+        isRequired: input.isRequired,
         interruptAtSeconds: input.interruptAtSeconds,
         status: input.status.toUpperCase() as PublishStatus,
         questions: {
@@ -243,6 +245,7 @@ quizzesRouter.patch(
       z.object({
         title: z.string().min(2).max(180).optional(),
         passingScore: z.number().int().min(70).max(100).optional(),
+        isRequired: z.boolean().optional(),
         interruptAtSeconds: z
           .number()
           .int()

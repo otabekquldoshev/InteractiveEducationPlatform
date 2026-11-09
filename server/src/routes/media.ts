@@ -285,6 +285,7 @@ mediaRouter.post(
             assetId: asset.id,
             mimeType: videoMime,
             size: BigInt(file.size),
+            published: true,
           },
           create: {
             ...input,
@@ -293,6 +294,7 @@ mediaRouter.post(
             assetId: asset.id,
             mimeType: videoMime,
             size: BigInt(file.size),
+            published: true,
           },
         })
         await transaction.lesson.update({
@@ -305,8 +307,10 @@ mediaRouter.post(
         await removeAsset(asset.id)
         throw error
       })
-    await removeAsset(previous?.assetId)
     res.status(201).json({ video: { ...video, size: Number(video.size) } })
+    // The new URL is already committed. Do not keep the browser waiting while
+    // SQLite removes the previous large blob.
+    void removeAsset(previous?.assetId)
   },
 )
 
@@ -337,10 +341,10 @@ mediaRouter.post(
         await removeAsset(asset.id)
         throw error
       })
-    await removeAsset(video.signLanguageAssetId)
     res.status(201).json({
       video: { ...updated, size: Number(updated.size) },
     })
+    void removeAsset(video.signLanguageAssetId)
   },
 )
 

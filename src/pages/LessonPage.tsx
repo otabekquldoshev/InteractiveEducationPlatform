@@ -129,9 +129,7 @@ function getSurdoFrame(
   // vaqtiga bog'liq qoladi, shuning uchun past tezlikda ham matn kesilmaydi va
   // video oxirida tarjima to'liq ketma-ketlikning oxiriga yetadi.
   const frameProgress =
-    SURDO_BASE_FRAME_SECONDS /
-    Math.max(0.1, speed) /
-    Math.max(0.1, duration)
+    SURDO_BASE_FRAME_SECONDS / Math.max(0.1, speed) / Math.max(0.1, duration)
   const displayedProgress = Math.min(
     0.999999,
     Math.floor(safeProgress / frameProgress) * frameProgress,
@@ -232,9 +230,10 @@ export default function LessonPage() {
   const containerRef = useRef<HTMLDivElement>(null)
   const recognitionRef = useRef<any>(null)
   const [embeddedQuizzes, setEmbeddedQuizzes] = useState<EmbeddedQuiz[]>([])
-  const [passedEmbeddedQuizIds, setPassedEmbeddedQuizIds] = useState<Set<string>>(
-    new Set(),
-  )
+  const [passedEmbeddedQuizIds, setPassedEmbeddedQuizIds] =
+    useState<Set<string>>(new Set())
+  const [resolvedEmbeddedQuizIds, setResolvedEmbeddedQuizIds] =
+    useState<Set<string>>(new Set())
   const [activeEmbeddedQuizId, setActiveEmbeddedQuizId] = useState("")
   const [embeddedQuizOpen, setEmbeddedQuizOpen] = useState(false)
   const [embeddedQuizError, setEmbeddedQuizError] = useState("")
@@ -258,13 +257,16 @@ export default function LessonPage() {
   const activeEmbeddedQuiz = embeddedQuizzes.find(
     (quiz) => quiz.id === activeEmbeddedQuizId,
   )
-  const allEmbeddedQuizzesPassed = embeddedQuizSummaries.every((quiz) =>
-    passedEmbeddedQuizIds.has(quiz.id),
+  const requiredEmbeddedQuizzes = embeddedQuizSummaries.filter(
+    (quiz) => quiz.isRequired,
+  )
+  const allRequiredEmbeddedQuizzesPassed = requiredEmbeddedQuizzes.every(
+    (quiz) => passedEmbeddedQuizIds.has(quiz.id),
   )
   const nextPendingCheckpoint = (targetTime = Number.POSITIVE_INFINITY) =>
     embeddedQuizSummaries.find(
       (quiz) =>
-        !passedEmbeddedQuizIds.has(quiz.id) &&
+        !resolvedEmbeddedQuizIds.has(quiz.id) &&
         quiz.interruptAtSeconds! <= targetTime,
     )
 
@@ -288,9 +290,11 @@ export default function LessonPage() {
         })),
       }))
       setEmbeddedQuizzes(quizzes)
-      setPassedEmbeddedQuizIds(
-        new Set(quizzes.filter((quiz) => quiz.alreadyPassed).map((quiz) => quiz.id)),
+      const passedIds = new Set(
+        quizzes.filter((quiz) => quiz.alreadyPassed).map((quiz) => quiz.id),
       )
+      setPassedEmbeddedQuizIds(passedIds)
+      setResolvedEmbeddedQuizIds(new Set(passedIds))
     } catch (error) {
       setEmbeddedQuizError(
         error instanceof Error ? error.message : "Testni yuklab bo‘lmadi",
@@ -301,6 +305,7 @@ export default function LessonPage() {
   useEffect(() => {
     setEmbeddedQuizzes([])
     setPassedEmbeddedQuizIds(new Set())
+    setResolvedEmbeddedQuizIds(new Set())
     setActiveEmbeddedQuizId("")
     setEmbeddedQuizOpen(false)
     setEmbeddedQuizError("")
@@ -459,6 +464,21 @@ export default function LessonPage() {
   const continueAfterEmbeddedQuiz = () => {
     if (!activeEmbeddedQuiz) return
     setPassedEmbeddedQuizIds((current) => {
+      const next = new Set(current)
+      next.add(activeEmbeddedQuiz.id)
+      return next
+    })
+    continueVideoAfterEmbeddedQuiz()
+  }
+
+  const skipEmbeddedQuiz = () => {
+    if (!activeEmbeddedQuiz || activeEmbeddedQuiz.isRequired) return
+    continueVideoAfterEmbeddedQuiz()
+  }
+
+  const continueVideoAfterEmbeddedQuiz = () => {
+    if (!activeEmbeddedQuiz) return
+    setResolvedEmbeddedQuizIds((current) => {
       const next = new Set(current)
       next.add(activeEmbeddedQuiz.id)
       return next
@@ -784,6 +804,7 @@ export default function LessonPage() {
             }`}
           >
             <video
+              key={lesson.videoUrl}
               ref={videoRef}
               src={lesson.videoUrl || undefined}
               poster={lesson.imageUrl || undefined}
@@ -820,6 +841,7 @@ export default function LessonPage() {
                 key={activeEmbeddedQuiz.id}
                 quiz={activeEmbeddedQuiz}
                 onPassed={continueAfterEmbeddedQuiz}
+                onSkip={skipEmbeddedQuiz}
               />
             )}
             {embeddedQuizOpen && !activeEmbeddedQuiz && (
@@ -1041,11 +1063,17 @@ export default function LessonPage() {
                     aria-label={t("surdo_speed")}
                     title={t("surdo_speed")}
                   >
-                    {[0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 2, 2.5, 3, 4].map((rate) => (
-                      <option key={rate} value={rate} className="bg-slate-800">
-                        S {rate}x
-                      </option>
-                    ))}
+                    {[0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 2, 2.5, 3, 4].map(
+                      (rate) => (
+                        <option
+                          key={rate}
+                          value={rate}
+                          className="bg-slate-800"
+                        >
+                          S {rate}x
+                        </option>
+                      ),
+                    )}
                   </select>
 
                   <button
@@ -1127,17 +1155,19 @@ export default function LessonPage() {
               {embeddedQuizSummaries.length > 0 && (
                 <span
                   className={`inline-flex min-h-10 items-center gap-2 rounded-lg border px-3 text-xs font-semibold ${
-                    allEmbeddedQuizzesPassed
+                    allRequiredEmbeddedQuizzesPassed
                       ? "border-emerald-500/60 bg-emerald-500/10 text-emerald-300"
                       : "border-amber-500/60 bg-amber-500/10 text-amber-200"
                   }`}
                 >
-                  {allEmbeddedQuizzesPassed && (
+                  {allRequiredEmbeddedQuizzesPassed && (
                     <CheckCircle className="h-4 w-4" />
                   )}
-                  {allEmbeddedQuizzesPassed
-                    ? `${embeddedQuizSummaries.length} ta video testi o‘tildi — sertifikatga qo‘shildi`
-                    : `Video ichida ${embeddedQuizSummaries.length} ta majburiy test bor`}
+                  {requiredEmbeddedQuizzes.length === 0
+                    ? `Video ichida ${embeddedQuizSummaries.length} ta ixtiyoriy test bor`
+                    : allRequiredEmbeddedQuizzesPassed
+                      ? `${requiredEmbeddedQuizzes.length} ta majburiy video testi o‘tildi`
+                      : `Video ichida ${requiredEmbeddedQuizzes.length} ta majburiy test bor`}
                 </span>
               )}
               <button

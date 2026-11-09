@@ -7,6 +7,7 @@ export type EmbeddedQuiz = {
   id: string
   title: string
   passingScore: number
+  isRequired: boolean
   interruptAtSeconds: number
   alreadyPassed: boolean
   questions: Question[]
@@ -21,9 +22,11 @@ type SubmissionResult = {
 export default function EmbeddedVideoQuiz({
   quiz,
   onPassed,
+  onSkip,
 }: {
   quiz: EmbeddedQuiz
   onPassed: () => void
+  onSkip: () => void
 }) {
   const [answers, setAnswers] = useState<Record<string, string[]>>({})
   const [submitting, setSubmitting] = useState(false)
@@ -101,8 +104,9 @@ export default function EmbeddedVideoQuiz({
               {quiz.title}
             </h2>
             <p className="mt-1 text-sm text-slate-500">
-              Video davom etishi uchun testdan kamida {quiz.passingScore}%
-              natija oling.
+              {quiz.isRequired
+                ? `Video davom etishi uchun testdan kamida ${quiz.passingScore}% natija oling.`
+                : "Bu test ixtiyoriy. Xohlasangiz javob bering yoki videoni davom ettiring."}
             </p>
           </div>
         </div>
@@ -135,15 +139,26 @@ export default function EmbeddedVideoQuiz({
                 Videoni davom ettirish
               </button>
             ) : (
-              <button
-                type="button"
-                onClick={retry}
-                autoFocus
-                className="mt-6 inline-flex min-h-12 items-center gap-2 rounded-xl bg-rose-600 px-6 font-semibold text-white hover:bg-rose-700"
-              >
-                <RotateCcw className="h-5 w-5" />
-                Qayta urinib ko‘rish
-              </button>
+              <div className="mt-6 flex flex-wrap justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={retry}
+                  autoFocus
+                  className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-rose-600 px-6 font-semibold text-white hover:bg-rose-700"
+                >
+                  <RotateCcw className="h-5 w-5" />
+                  Qayta urinib ko‘rish
+                </button>
+                {!quiz.isRequired && (
+                  <button
+                    type="button"
+                    onClick={onSkip}
+                    className="min-h-12 rounded-xl border border-slate-300 px-6 font-semibold text-slate-700"
+                  >
+                    Videoni davom ettirish
+                  </button>
+                )}
+              </div>
             )}
           </div>
         ) : (
@@ -211,6 +226,15 @@ export default function EmbeddedVideoQuiz({
             >
               {submitting ? "Tekshirilmoqda..." : "Javoblarni tekshirish"}
             </button>
+            {!quiz.isRequired && (
+              <button
+                type="button"
+                onClick={onSkip}
+                className="mt-3 min-h-11 w-full rounded-xl border border-slate-300 px-5 font-semibold text-slate-700 hover:bg-slate-50"
+              >
+                Hozir o‘tkazib yuborish
+              </button>
+            )}
           </>
         )}
       </div>

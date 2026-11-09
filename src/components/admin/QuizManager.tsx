@@ -8,6 +8,7 @@ type QuizDetails = {
   id: string
   title: string
   passingScore: number
+  isRequired: boolean
   interruptAtSeconds: number | null
   status: string
   questions: Question[]
@@ -38,12 +39,11 @@ export default function QuizManager({
   const [questionId, setQuestionId] = useState<string | null>(null)
   const [selectedQuizId, setSelectedQuizId] = useState("")
   const [creating, setCreating] = useState(false)
-  const lessonQuizzes =
-    selectedLesson?.quizzes?.length
-      ? selectedLesson.quizzes
-      : selectedLesson?.quiz
-        ? [selectedLesson.quiz]
-        : []
+  const lessonQuizzes = selectedLesson?.quizzes?.length
+    ? selectedLesson.quizzes
+    : selectedLesson?.quiz
+      ? [selectedLesson.quiz]
+      : []
 
   useEffect(() => {
     const firstQuizId =
@@ -91,6 +91,7 @@ export default function QuizManager({
           body: {
             title: data.get("title"),
             passingScore: Number(data.get("passingScore")),
+            isRequired: data.get("isRequired") === "on",
             interruptAtSeconds,
             status: "draft",
             questions: [],
@@ -119,6 +120,7 @@ export default function QuizManager({
         body: {
           title: data.get("title"),
           passingScore: Number(data.get("passingScore")),
+          isRequired: data.get("isRequired") === "on",
           interruptAtSeconds,
           status: data.get("status"),
         },
@@ -294,7 +296,8 @@ export default function QuizManager({
             </button>
           </div>
           <p className="mt-2 text-xs text-violet-700">
-            Testlar soni cheklanmagan. Har biriga videoning boshqa vaqtini belgilang.
+            Testlar soni cheklanmagan. Har biriga videoning boshqa vaqtini
+            belgilang.
           </p>
         </div>
       )}
@@ -333,6 +336,7 @@ export default function QuizManager({
               max={100}
             />
             <QuizPlacementFields lesson={selectedLesson} />
+            <RequiredQuizField />
           </div>
           <button
             disabled={busy}
@@ -424,6 +428,7 @@ export default function QuizManager({
                 lesson={selectedLesson}
                 interruptAtSeconds={quiz.interruptAtSeconds}
               />
+              <RequiredQuizField defaultChecked={quiz.isRequired} />
               <label className="text-sm font-semibold text-slate-700">
                 {t("status")}
                 <select
@@ -527,7 +532,7 @@ function QuizPlacementFields({
           disabled={!isVideo}
           className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-3 font-normal disabled:bg-slate-100"
         >
-          {isVideo && <option value="during">Video ichida (majburiy)</option>}
+          {isVideo && <option value="during">Video ichida</option>}
           <option value="after">Video tugagandan keyin</option>
         </select>
       </label>
@@ -549,8 +554,8 @@ function QuizPlacementFields({
         </label>
       ) : isVideo ? (
         <div className="rounded-xl border border-slate-200 bg-[#fff9fb] p-3 text-sm text-slate-600">
-          Test video to‘liq tugagandan keyin ochiladi. Video ichida chiqarish uchun
-          yuqoridan “Video ichida”ni tanlang.
+          Test video to‘liq tugagandan keyin ochiladi. Video ichida chiqarish
+          uchun yuqoridan “Video ichida”ni tanlang.
         </div>
       ) : (
         <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
@@ -558,6 +563,29 @@ function QuizPlacementFields({
         </div>
       )}
     </>
+  )
+}
+
+function RequiredQuizField({
+  defaultChecked = false,
+}: {
+  defaultChecked?: boolean
+}) {
+  return (
+    <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-[#fff9fb] p-3 text-sm text-slate-700">
+      <input
+        name="isRequired"
+        type="checkbox"
+        defaultChecked={defaultChecked}
+        className="mt-0.5 h-4 w-4 accent-rose-600"
+      />
+      <span>
+        <strong className="block text-slate-900">Majburiy test</strong>
+        <span className="mt-1 block text-xs">
+          Yoqilsa, testdan o‘tmasdan dars progressi va sertifikat ochilmaydi.
+        </span>
+      </span>
+    </label>
   )
 }
 
